@@ -9,8 +9,14 @@ public class PrestamoLlaveRepository {
 
     private final List<PrestamoLlave> registros = new ArrayList<>();
 
-    public void guardar(PrestamoLlave registro) {
+    //Guardar (alias de agregar)
+    public void guardar(PrestamoLlave registro){
         registros.add(registro);
+    }
+
+    // Para que coincida con el service
+    public void agregar(PrestamoLlave registro) {
+        guardar(registro);
     }
 
     public List<PrestamoLlave> obtenerTodos() {
@@ -18,8 +24,7 @@ public class PrestamoLlaveRepository {
     }
 
     public PrestamoLlave buscarPorNombreSolicitante(String nombreSolicitante) {
-        for (int i = 0; i < registros.size(); i++) {
-            PrestamoLlave actual = registros.get(i);
+        for (PrestamoLlave actual : registros) {
             if (actual.getNombreSolicitante().equalsIgnoreCase(nombreSolicitante)) {
                 return actual;
             }
@@ -36,5 +41,10 @@ public class PrestamoLlaveRepository {
             }
         }
         return false;
+    }
+
+    // Para que coincida con el service
+    public boolean eliminar(String nombreSolicitante) {
+        return eliminarPorNombreSolicitante(nombreSolicitante);
     }
 }
