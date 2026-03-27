@@ -11,7 +11,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/example/prestamollaves/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Préstamo de llaves de salón");
+        stage.setTitle("Préstamo de llaves de salón : Alan");
         stage.setScene(scene);
         stage.show();
     }
