@@ -2,6 +2,7 @@ package com.example.prestamollaves.service;
 
 import com.example.prestamollaves.model.PrestamoLlave;
 import com.example.prestamollaves.repository.PrestamoLlaveRepository;
+import javafx.scene.control.Alert;
 
 import java.util.List;
 
@@ -14,50 +15,59 @@ public class PrestamoLlaveService {
     public String[] obtenerTurnos() {
         return turnos;
     }
-
     public List<PrestamoLlave> obtenerTodos() {
         return repository.obtenerTodos();
     }
-
     public PrestamoLlave buscarPorNombreSolicitante(String nombreSolicitante) {
-        if (nombreSolicitante == null || nombreSolicitante.trim().isEmpty()) {
+        if (nombreSolicitante==null || nombreSolicitante.trim().isEmpty()) {
             return null;
         }
         return repository.buscarPorNombreSolicitante(nombreSolicitante.trim());
     }
 
+
     public String agregar(String nombreSolicitante, String salon, String turno) {
-        // TODO:
-        // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Validar que salon no esté vacío.
-        // 3. Validar que turno no sea null.
-        // 4. Validar que no exista otro registro con el mismo nombreSolicitante.
-        // 5. Si todo está bien, crear un objeto PrestamoLlave y guardarlo en repository.
-        // 6. Regresar null cuando el registro se guarde correctamente.
-        return "Completa la lógica de agregar en el service";
+        if (nombreSolicitante==null || nombreSolicitante.trim().isEmpty()) return "el nombre no puede estar vacio";
+        if (salon == null || salon.trim().isEmpty()) return "el salon no puede estar vacio";
+        if (turno == null) return "debes seleccionar un turno";
+
+        if(repository.buscarPorNombreSolicitante(nombreSolicitante.trim()) != null) {
+            return "error";
+        }
+
+        PrestamoLlave nuevo = new PrestamoLlave(nombreSolicitante.trim(), salon.trim(), turno);
+        repository.guardar(nuevo);
+
+        return null;
     }
 
-    public String actualizar(String nombreOriginal, String nombreNuevo, String salon, String turno) {
-        // TODO:
-        // 1. Validar que nombreOriginal no sea null ni vacío.
-        // 2. Validar que nombreNuevo no esté vacío.
-        // 3. Validar que salon no esté vacío.
-        // 4. Validar que turno no sea null.
-        // 5. Buscar el registro original usando nombreOriginal.
-        // 6. Si no existe, regresar mensaje de error.
-        // 7. Si el nombre cambió, validar que el nuevo nombre no esté repetido.
-        // 8. Si todo está bien, actualizar los atributos del objeto encontrado.
-        // 9. Regresar null si todo salió bien.
-        return "Completa la lógica de actualizar en el service";
+
+    public String actualizar(String nombreOriginal, String nombreNuevo, String salon, String turno) { // TODO:
+
+        if (nombreOriginal==null || nombreOriginal.isEmpty()) return "error ";
+        PrestamoLlave registro = repository.buscarPorNombreSolicitante(nombreOriginal);
+        if (registro==null) return "el registro original no existe";
+        if (nombreNuevo.isEmpty() || salon.isEmpty() || turno == null) return "los campos estan vacios";
+        if (!nombreOriginal.equalsIgnoreCase(nombreNuevo)) {
+            if (repository.buscarPorNombreSolicitante(nombreNuevo) != null) {
+                return "ya hay un nombre igual";
+            }
+        }
+        registro.setNombreSolicitante(nombreNuevo.trim());
+        registro.setSalon(salon.trim());
+        registro.setTurno(turno);
+
+        return null;
     }
 
     public String eliminar(String nombreSolicitante) {
         // TODO:
-        // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Buscar si existe el registro.
-        // 3. Si no existe, regresar mensaje de error.
-        // 4. Si existe, eliminarlo desde repository.
-        // 5. Regresar null si se eliminó correctamente.
-        return "Completa la lógica de eliminar en el service";
+        if (nombreSolicitante == null || nombreSolicitante.trim().isEmpty()) return "nombre invalido";
+
+        boolean eliminado = repository.eliminarPorNombreSolicitante(nombreSolicitante.trim());
+        if (!eliminado) return "no se encontro el registro para eliminar";
+
+        return null;
     }
+
 }
