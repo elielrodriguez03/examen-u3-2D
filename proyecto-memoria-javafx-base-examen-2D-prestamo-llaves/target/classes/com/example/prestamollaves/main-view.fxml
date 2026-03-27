@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.prestamollaves.controller.MainController">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <Label text="Préstamo de llaves de salón"/>
+    <TextField fx:id="txtNombreSolicitante" promptText="Nombre del solicitante"/>
+    <TextField fx:id="txtSalon" promptText="Salón"/>
+    <ComboBox fx:id="cbTurno" promptText="Selecciona turno"/>
+
+    <HBox spacing="10">
+        <Button text="Agregar" onAction="#agregar"/>
+        <Button text="Buscar" onAction="#buscar"/>
+        <Button text="Actualizar" onAction="#actualizar"/>
+        <Button text="Eliminar" onAction="#eliminar"/>
+        <Button text="Limpiar" onAction="#limpiar"/>
+    </HBox>
+
+    <ListView fx:id="lvRegistros" prefHeight="250"/>
+</VBox>
