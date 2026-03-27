@@ -26,38 +26,55 @@ public class PrestamoLlaveService {
         return repository.buscarPorNombreSolicitante(nombreSolicitante.trim());
     }
 
-    public String agregar(String nombreSolicitante, String salon, String turno) {
-        // TODO:
-        // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Validar que salon no esté vacío.
-        // 3. Validar que turno no sea null.
-        // 4. Validar que no exista otro registro con el mismo nombreSolicitante.
-        // 5. Si todo está bien, crear un objeto PrestamoLlave y guardarlo en repository.
-        // 6. Regresar null cuando el registro se guarde correctamente.
-        return "Completa la lógica de agregar en el service";
+    // AGREGAR
+    public boolean agregar(PrestamoLlave prestamo) {
+
+        for (PrestamoLlave p : repository.obtenerTodos()) {
+            if (p.getNombreSolicitante().equalsIgnoreCase(prestamo.getNombreSolicitante())) {
+                return false;
+            }
+        }
+
+        repository.obtenerTodos().add(prestamo);
+        return true;
     }
 
-    public String actualizar(String nombreOriginal, String nombreNuevo, String salon, String turno) {
-        // TODO:
-        // 1. Validar que nombreOriginal no sea null ni vacío.
-        // 2. Validar que nombreNuevo no esté vacío.
-        // 3. Validar que salon no esté vacío.
-        // 4. Validar que turno no sea null.
-        // 5. Buscar el registro original usando nombreOriginal.
-        // 6. Si no existe, regresar mensaje de error.
-        // 7. Si el nombre cambió, validar que el nuevo nombre no esté repetido.
-        // 8. Si todo está bien, actualizar los atributos del objeto encontrado.
-        // 9. Regresar null si todo salió bien.
-        return "Completa la lógica de actualizar en el service";
+    // ACTUALIZAR
+    public boolean actualizar(String nombreOriginal, PrestamoLlave nuevo) {
+
+        for (PrestamoLlave p : repository.obtenerTodos()) {
+
+            if (p.getNombreSolicitante().equalsIgnoreCase(nombreOriginal)) {
+
+                if (!nombreOriginal.equalsIgnoreCase(nuevo.getNombreSolicitante())) {
+                    for (PrestamoLlave otro : repository.obtenerTodos()) {
+                        if (otro.getNombreSolicitante().equalsIgnoreCase(nuevo.getNombreSolicitante())) {
+                            return false;
+                        }
+                    }
+                }
+
+                p.setNombreSolicitante(nuevo.getNombreSolicitante());
+                p.setSalon(nuevo.getSalon());
+                p.setTurno(nuevo.getTurno());
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public String eliminar(String nombreSolicitante) {
-        // TODO:
-        // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Buscar si existe el registro.
-        // 3. Si no existe, regresar mensaje de error.
-        // 4. Si existe, eliminarlo desde repository.
-        // 5. Regresar null si se eliminó correctamente.
-        return "Completa la lógica de eliminar en el service";
+    //  ELIMINAR
+    public boolean eliminar(String nombre) {
+
+        for (PrestamoLlave p : repository.obtenerTodos()) {
+            if (p.getNombreSolicitante().equalsIgnoreCase(nombre)) {
+                repository.obtenerTodos().remove(p);
+                return true;
+            }
+        }
+
+        return false;
     }
 }
