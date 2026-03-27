@@ -56,7 +56,28 @@ public class MainController {
         // 2. Mandar esos datos al service.
         // 3. Si el service regresa un mensaje, mostrar error.
         // 4. Si regresa null, refrescar la lista y limpiar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Agregar", Alert.AlertType.INFORMATION);
+        String nombre = txtNombreSolicitante.getText();
+        String turno = cbTurno.getValue();
+        String salon = txtSalon.getText();
+
+        if (nombre.isEmpty() || salon.isEmpty() || turno == null) {
+            mostrarMensaje("Error", "por favor completa los campos", Alert.AlertType.ERROR);
+        return;
+        }
+        String mensajeError = service.agregar(nombre, turno, salon);
+         if (mensajeError != null){
+             mostrarMensaje("Error", mensajeError, Alert.AlertType.ERROR);
+         }else {
+             actualizarLista();
+             limpiar();
+             mostrarMensaje("Exito", "Registro exitoso", Alert.AlertType.INFORMATION);
+         }
+
+        txtNombreSolicitante.clear();
+        txtSalon.clear();
+        cbTurno.setValue(null);
+
+
     }
 
     @FXML
@@ -97,7 +118,24 @@ public class MainController {
         //
         // Importante:
         // Si nombreOriginal es null, entonces no se ha buscado ni seleccionado nada.
-        mostrarMensaje("Pendiente", "Completa la lógica de Actualizar", Alert.AlertType.INFORMATION);
+        if (nombreOriginal == null){
+mostrarMensaje("Aviso", "Selecciona uno para editar", Alert.AlertType.WARNING);
+return;
+        }
+        String nuevonombre = txtNombreSolicitante.getText();
+        String nuevoturno = cbTurno.getValue();
+        String nuevosalon = txtSalon.getText();
+
+        String msgError = service.actualizar(nombreOriginal, nuevonombre, nuevosalon, nuevoturno);
+
+        if(msgError == null){
+            actualizarLista();
+            limpiar();
+            mostrarMensaje("Exito", "Registro actualizado", Alert.AlertType.INFORMATION);
+        }else {
+            mostrarMensaje("Error", "no se pudo actualizar" , Alert.AlertType.ERROR);
+        }
+
     }
 
     @FXML
@@ -114,7 +152,21 @@ public class MainController {
         //
         // También se puede seleccionar un elemento del ListView
         // y luego presionar Eliminar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Eliminar", Alert.AlertType.INFORMATION);
+        String nombredelete = txtNombreSolicitante.getText();
+        if (nombredelete.isEmpty()) {
+            mostrarMensaje("Aviso", "seleccione el nombre a eliminar", Alert.AlertType.WARNING);
+            return;
+        }
+        String msgError = service.eliminar(nombredelete);
+
+        if (msgError == null){
+            actualizarLista();
+            limpiar();
+            mostrarMensaje("Exito", "Registro eliminado" , Alert.AlertType.INFORMATION);
+        }else {
+            mostrarMensaje("Error", "no se pudo eliminar", Alert.AlertType.ERROR);
+        }
+
     }
 
     @FXML
