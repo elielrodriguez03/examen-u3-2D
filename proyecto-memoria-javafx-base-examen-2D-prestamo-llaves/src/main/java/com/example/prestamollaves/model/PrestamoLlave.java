@@ -2,6 +2,7 @@ package com.example.prestamollaves.model;
 
 public class PrestamoLlave {
 
+    public String getTurno;
     private String nombreSolicitante;
     private String salon;
     private String turno;
