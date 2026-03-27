@@ -28,80 +28,78 @@ public class PrestamoLlaveService {
 
     public String agregar(String nombreSolicitante, String salon, String turno) {
         if (nombreSolicitante == null || nombreSolicitante.trim().isEmpty()) {
-            return "nombre solicitante requerido";
+            return "nombre del solicitante es obligatorio";
         }
 
         if (salon == null || salon.trim().isEmpty()) {
-            return "salón requerido";
+            return "salón es obligatorio";
         }
 
         if (turno == null || turno.trim().isEmpty()) {
-            return "turno requerido";
+            return "turno es obligatorio";
         }
 
         String nombreLimpio = nombreSolicitante.trim();
-        String salonLimpio = salon.trim();
-        String turnoLimpio = turno.trim();
-
         if (repository.buscarPorNombreSolicitante(nombreLimpio) != null) {
             return "ya existe un registro con ese nombre";
         }
 
-        PrestamoLlave registro = new PrestamoLlave(nombreLimpio, salonLimpio, turnoLimpio);
+        PrestamoLlave registro = new PrestamoLlave(nombreLimpio, salon.trim(), turno);
         repository.guardar(registro);
         return null;
     }
 
     public String actualizar(String nombreOriginal, String nombreNuevo, String salon, String turno) {
         if (nombreOriginal == null || nombreOriginal.trim().isEmpty()) {
-            return "nombre original requerido";
+            return "nombre original no puede ser vacío";
         }
 
         if (nombreNuevo == null || nombreNuevo.trim().isEmpty()) {
-            return "nombre nuevo requerido";
+            return "nombre nuevo es obligatorio";
         }
 
         if (salon == null || salon.trim().isEmpty()) {
-            return "salón requerido";
+            return "salón es obligatorio";
         }
 
         if (turno == null || turno.trim().isEmpty()) {
-            return "turno requerido";
+            return "turno es obligatorio";
         }
 
-        String nombreOriginalLimpio = nombreOriginal.trim();
+        PrestamoLlave registroExistente = repository.buscarPorNombreSolicitante(nombreOriginal.trim());
+        if (registroExistente == null) {
+            return "registro original no existe";
+        }
+
         String nombreNuevoLimpio = nombreNuevo.trim();
-        String salonLimpio = salon.trim();
-        String turnoLimpio = turno.trim();
-
-        PrestamoLlave registro = repository.buscarPorNombreSolicitante(nombreOriginalLimpio);
-        if (registro == null) {
-            return "registro original no encontrado";
-        }
-
-        if (!nombreOriginalLimpio.equalsIgnoreCase(nombreNuevoLimpio)) {
-            PrestamoLlave duplicado = repository.buscarPorNombreSolicitante(nombreNuevoLimpio);
-            if (duplicado != null) {
-                return "ya existe otro registro con el nuevo nombre";
+        if (!nombreOriginal.trim().equalsIgnoreCase(nombreNuevoLimpio)) {
+            PrestamoLlave otro = repository.buscarPorNombreSolicitante(nombreNuevoLimpio);
+            if (otro != null) {
+                return "otro registro ya tiene ese nombre";
             }
         }
 
-        registro.setNombreSolicitante(nombreNuevoLimpio);
-        registro.setSalon(salonLimpio);
-        registro.setTurno(turnoLimpio);
+        registroExistente.setNombreSolicitante(nombreNuevoLimpio);
+        registroExistente.setSalon(salon.trim());
+        registroExistente.setTurno(turno.trim());
 
         return null;
     }
 
     public String eliminar(String nombreSolicitante) {
         if (nombreSolicitante == null || nombreSolicitante.trim().isEmpty()) {
-            return "nombre solicitante requerido";
+            return "nombre del solicitante es obligatorio";
         }
 
         String nombreLimpio = nombreSolicitante.trim();
+        PrestamoLlave registroExistente = repository.buscarPorNombreSolicitante(nombreLimpio);
+        if (registroExistente == null) {
+            return "registro no encontrado para eliminar";
+        }
+
         boolean eliminado = repository.eliminarPorNombreSolicitante(nombreLimpio);
         if (!eliminado) {
-            return "registro no encontrado";
+            return "no se pudo eliminar el registro";
         }
 
         return null;

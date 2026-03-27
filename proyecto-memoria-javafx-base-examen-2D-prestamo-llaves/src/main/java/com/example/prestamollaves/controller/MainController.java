@@ -51,19 +51,15 @@ public class MainController {
 
     @FXML
     public void agregar() {
-        String nombre = txtNombreSolicitante.getText();
-        String salon = txtSalon.getText();
-        String turno = cbTurno.getValue();
-
-        String resultado = service.agregar(nombre, salon, turno);
+        String resultado = service.agregar(txtNombreSolicitante.getText(), txtSalon.getText(), cbTurno.getValue());
         if (resultado != null) {
-            mostrarMensaje("error", resultado, Alert.AlertType.ERROR);
+            mostrarMensaje("error", resultado, Alert.AlertType.WARNING);
             return;
         }
 
+        mostrarMensaje("hecho", "registro guardado", Alert.AlertType.INFORMATION);
         actualizarLista();
         limpiar();
-        mostrarMensaje("éxito", "registro agregado", Alert.AlertType.INFORMATION);
     }
 
     @FXML
@@ -86,39 +82,28 @@ public class MainController {
 
     @FXML
     public void actualizar() {
-        if (nombreOriginal == null || nombreOriginal.trim().isEmpty()) {
-            mostrarMensaje("error", "debes buscar o seleccionar un registro primero", Alert.AlertType.WARNING);
-            return;
-        }
-
-        String nombre = txtNombreSolicitante.getText();
-        String salon = txtSalon.getText();
-        String turno = cbTurno.getValue();
-
-        String resultado = service.actualizar(nombreOriginal, nombre, salon, turno);
+        String resultado = service.actualizar(nombreOriginal, txtNombreSolicitante.getText(), txtSalon.getText(), cbTurno.getValue());
         if (resultado != null) {
-            mostrarMensaje("error", resultado, Alert.AlertType.ERROR);
+            mostrarMensaje("error", resultado, Alert.AlertType.WARNING);
             return;
         }
 
+        mostrarMensaje("hecho", "registro actualizado", Alert.AlertType.INFORMATION);
         actualizarLista();
         limpiar();
-        mostrarMensaje("éxito", "registro actualizado", Alert.AlertType.INFORMATION);
     }
 
     @FXML
     public void eliminar() {
-        String nombre = txtNombreSolicitante.getText();
-
-        String resultado = service.eliminar(nombre);
+        String resultado = service.eliminar(txtNombreSolicitante.getText());
         if (resultado != null) {
-            mostrarMensaje("error", resultado, Alert.AlertType.ERROR);
+            mostrarMensaje("error", resultado, Alert.AlertType.WARNING);
             return;
         }
 
+        mostrarMensaje("hecho", "registro eliminado", Alert.AlertType.INFORMATION);
         actualizarLista();
         limpiar();
-        mostrarMensaje("éxito", "registro eliminado", Alert.AlertType.INFORMATION);
     }
 
     @FXML
