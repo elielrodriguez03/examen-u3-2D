@@ -17,7 +17,7 @@ public class PrestamoLlaveRepository {
         return registros;
     }
 
-    public PrestamoLlave buscarPorNombreSolicitante(String nombreSolicitante) {
+    public  PrestamoLlave buscarPorNombreSolicitante(String nombreSolicitante) {
         for (int i = 0; i < registros.size(); i++) {
             PrestamoLlave actual = registros.get(i);
             if (actual.getNombreSolicitante().equalsIgnoreCase(nombreSolicitante)) {
