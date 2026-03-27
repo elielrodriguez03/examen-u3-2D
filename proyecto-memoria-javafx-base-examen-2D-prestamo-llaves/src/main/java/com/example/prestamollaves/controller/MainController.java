@@ -56,7 +56,20 @@ public class MainController {
         // 2. Mandar esos datos al service.
         // 3. Si el service regresa un mensaje, mostrar error.
         // 4. Si regresa null, refrescar la lista y limpiar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Agregar", Alert.AlertType.INFORMATION);
+
+        String nombre = txtNombreSolicitante.getText();
+
+        String salonNuevo = txtSalon.getText();
+
+        String turno = cbTurno.getValue();
+
+        String error = service.agregar(nombre, salonNuevo, turno);
+        if (error != null) {
+            mostrarMensaje("Error", error, Alert.AlertType.ERROR);
+            return;
+        }
+        actualizarLista();
+        limpiar();
     }
 
     @FXML
@@ -97,7 +110,23 @@ public class MainController {
         //
         // Importante:
         // Si nombreOriginal es null, entonces no se ha buscado ni seleccionado nada.
-        mostrarMensaje("Pendiente", "Completa la lógica de Actualizar", Alert.AlertType.INFORMATION);
+        if (nombreOriginal == null) {
+            mostrarMensaje("Aviso", "Primero escoje un registro para actualizar", Alert.AlertType.WARNING);
+            return;
+        }
+        String nombreNuevo = txtNombreSolicitante.getText();
+
+        String salonNuevo = txtSalon.getText();
+
+        String turnoNuevo = cbTurno.getValue();
+
+        String error = service.actualizar(nombreOriginal, nombreNuevo, salonNuevo, turnoNuevo);
+        if (error != null) {
+            mostrarMensaje("Error", error, Alert.AlertType.ERROR);
+            return;
+        }
+        actualizarLista();
+        limpiar();
     }
 
     @FXML
@@ -114,7 +143,16 @@ public class MainController {
         //
         // También se puede seleccionar un elemento del ListView
         // y luego presionar Eliminar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Eliminar", Alert.AlertType.INFORMATION);
+        String nombre = txtNombreSolicitante.getText();
+
+        String error = service.eliminar(nombre);
+        if (error != null) {
+            mostrarMensaje("Error", error, Alert.AlertType.ERROR);
+            return;
+        }
+
+        actualizarLista();
+        limpiar();
     }
 
     @FXML

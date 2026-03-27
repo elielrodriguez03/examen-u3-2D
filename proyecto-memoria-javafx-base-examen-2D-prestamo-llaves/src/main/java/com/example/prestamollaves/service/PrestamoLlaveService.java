@@ -34,7 +34,22 @@ public class PrestamoLlaveService {
         // 4. Validar que no exista otro registro con el mismo nombreSolicitante.
         // 5. Si todo está bien, crear un objeto PrestamoLlave y guardarlo en repository.
         // 6. Regresar null cuando el registro se guarde correctamente.
-        return "Completa la lógica de agregar en el service";
+        if (nombreSolicitante == null || nombreSolicitante.trim().isEmpty()) {
+            return "El nombre del solicitante no puede estar vacío";
+        }
+        if (salon == null || salon.trim().isEmpty()) {
+            return "El salon no puede estar vacío";
+        }
+        if (turno == null) {
+            return "Debe seleccionar un turno";
+        }
+        if (repository.buscarPorNombreSolicitante(nombreSolicitante.trim()) != null) {
+            return "Ya existe un registro con ese nombre de solicitante";
+        }
+        PrestamoLlave registro = new PrestamoLlave(nombreSolicitante.trim(), salon.trim(), turno);
+        repository.guardar(registro);
+        return null;
+
     }
 
     public String actualizar(String nombreOriginal, String nombreNuevo, String salon, String turno) {
@@ -48,7 +63,40 @@ public class PrestamoLlaveService {
         // 7. Si el nombre cambió, validar que el nuevo nombre no esté repetido.
         // 8. Si todo está bien, actualizar los atributos del objeto encontrado.
         // 9. Regresar null si todo salió bien.
-        return "Completa la lógica de actualizar en el service";
+        if (nombreOriginal == null || nombreOriginal.trim().isEmpty()) {
+            return "No se ha escojido ningún registro para actualizar";
+        }
+
+        PrestamoLlave registro = repository.buscarPorNombreSolicitante(nombreOriginal.trim());
+
+        if (registro == null) {
+            return "no esta ese registro";
+        }
+
+        if (nombreNuevo == null || nombreNuevo.trim().isEmpty()) {
+            return "el Nombre del solicitante no puede estar vacío";
+        }
+
+        if (salon == null || salon.trim().isEmpty()) {
+
+            return "No pusiste nada en salon";
+        }
+
+        if (turno == null) {
+            return "Debe seleccionar un turno";
+        }
+
+        if (!nombreOriginal.equalsIgnoreCase(nombreNuevo.trim())) {
+
+            if (repository.buscarPorNombreSolicitante(nombreNuevo) != null) {
+                return "Ya hay un registro con ese nombre de solicitante";
+            }
+        }
+
+        registro.setNombreSolicitante(nombreNuevo.trim());
+        registro.setSalon(salon.trim());
+        registro.setTurno(turno);
+        return null;
     }
 
     public String eliminar(String nombreSolicitante) {
@@ -58,6 +106,15 @@ public class PrestamoLlaveService {
         // 3. Si no existe, regresar mensaje de error.
         // 4. Si existe, eliminarlo desde repository.
         // 5. Regresar null si se eliminó correctamente.
-        return "Completa la lógica de eliminar en el service";
+        if (nombreSolicitante == null || nombreSolicitante.trim().isEmpty()) {
+            return "el nombre del solicitante esta vacio";
+        }
+
+        boolean eliminado = repository.eliminarPorNombreSolicitante(nombreSolicitante.trim());
+
+        if (!eliminado) {
+            return "No hay registro con ese nombre";
+        }
+        return null;
     }
 }
