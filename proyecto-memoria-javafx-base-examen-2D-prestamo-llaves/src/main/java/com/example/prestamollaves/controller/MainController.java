@@ -84,6 +84,21 @@ public class MainController {
 
         mostrarMensaje("Actualizar:", "Se ha actualizado la informacion con exito", Alert.AlertType.INFORMATION);
     }
+
+    @FXML
+    public void eliminar() {
+            MultipleSelectionModel<String> seleccionado = lvRegistros.getSelectionModel();
+            if (seleccionado != null) {
+                limpiar();
+                actualizarLista();
+                mostrarMensaje("Eliminar", "Registro eliminado con éxito", Alert.AlertType.INFORMATION);
+
+            } else {
+                mostrarMensaje("Eliminar", "Por favor, selecciona un registro de la lista para eliminar", Alert.AlertType.WARNING);
+            }
+        }
+
+
     @FXML
     public void limpiar() {
         txtNombreSolicitante.clear();
