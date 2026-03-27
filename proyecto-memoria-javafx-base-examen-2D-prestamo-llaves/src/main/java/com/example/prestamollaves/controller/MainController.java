@@ -51,12 +51,21 @@ public class MainController {
 
     @FXML
     public void agregar() {
+        String nombre = txtNombreSolicitante.getText();
+        String salon = txtSalon.getText();
+        String turno = cbTurno.getValue();
+        String agregarsolicitante = service.agregar(nombre,salon,turno);
+        if (agregarsolicitante != null){
+            mostrarMensaje("ERROR","No se agrego con exito",Alert.AlertType.ERROR);
+        }else {
+            actualizarLista();
+            limpiar();
+        }
         // TODO:
         // 1. Leer txtNombreSolicitante, txtSalon y cbTurno.
         // 2. Mandar esos datos al service.
         // 3. Si el service regresa un mensaje, mostrar error.
         // 4. Si regresa null, refrescar la lista y limpiar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Agregar", Alert.AlertType.INFORMATION);
     }
 
     @FXML
@@ -79,6 +88,18 @@ public class MainController {
 
     @FXML
     public void actualizar() {
+        String nombreNuevo = txtNombreSolicitante.getText();
+        String salonNuevo = txtSalon.getText();
+        String turnoNuevo = cbTurno.getValue();
+
+        String actualizarSoli = service.actualizar(nombreOriginal,nombreNuevo,salonNuevo,turnoNuevo);
+        if (actualizarSoli != null){
+            mostrarMensaje("Error","Actualiza tus datos y modifica el nombre para guardar",Alert.AlertType.ERROR);
+        }else {
+            actualizarLista();
+            limpiar();
+        }
+
         // TODO:
         // UPDATE reutiliza los mismos controles.
         //
@@ -97,11 +118,19 @@ public class MainController {
         //
         // Importante:
         // Si nombreOriginal es null, entonces no se ha buscado ni seleccionado nada.
-        mostrarMensaje("Pendiente", "Completa la lógica de Actualizar", Alert.AlertType.INFORMATION);
+
     }
 
     @FXML
     public void eliminar() {
+        String nombre = txtNombreSolicitante.getText();
+        String enviar = service.eliminar(nombre);
+        if (enviar != null){
+            mostrarMensaje("Error","Selecciona un nombre",Alert.AlertType.INFORMATION);
+        }else {
+            actualizarLista();
+            limpiar();
+        }
         // TODO:
         // DELETE sí borra el objeto de la lista.
         //
@@ -114,7 +143,6 @@ public class MainController {
         //
         // También se puede seleccionar un elemento del ListView
         // y luego presionar Eliminar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Eliminar", Alert.AlertType.INFORMATION);
     }
 
     @FXML

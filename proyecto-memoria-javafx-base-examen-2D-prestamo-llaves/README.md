@@ -1,7 +1,7 @@
-# Registro de préstamo de llaves de salón
+ # Registro de préstamo de llaves de salón
 
 Proyecto base de JavaFX para IntelliJ IDEA con Maven, Java 21 Temurin y FXML.
-
+Re
 ## Objetivo del ejercicio
 Desarrollar un CRUD sencillo reutilizando los mismos controles de captura para **Agregar** y **Actualizar**.
 
