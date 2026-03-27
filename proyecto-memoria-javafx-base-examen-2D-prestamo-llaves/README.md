@@ -38,6 +38,7 @@ src
     └── resources
         └── com/example/prestamollaves
             └── main-view.fxml
+            └── main-view.fxml
 ```
 
 ## Qué ya viene listo
