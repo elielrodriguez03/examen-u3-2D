@@ -53,10 +53,19 @@ public class MainController {
     public void agregar() {
         // TODO:
         // 1. Leer txtNombreSolicitante, txtSalon y cbTurno.
+        String nombre = txtNombreSolicitante.getText();
+        String salon = txtSalon.getText();
+        String turno = cbTurno.getValue();
         // 2. Mandar esos datos al service.
+        String mensaje = service.agregar(nombre, salon, turno);
         // 3. Si el service regresa un mensaje, mostrar error.
-        // 4. Si regresa null, refrescar la lista y limpiar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Agregar", Alert.AlertType.INFORMATION);
+        if (mensaje != null) {
+            mostrarMensaje("ERROR", mensaje, Alert.AlertType.INFORMATION);
+        }else {
+            // 4. Si regresa null, refrescar la lista y limpiar.
+            actualizarLista();
+            limpiar();
+        }
     }
 
     @FXML
@@ -91,13 +100,19 @@ public class MainController {
         //      - txtNombreSolicitante.getText()
         //      - txtSalon.getText()
         //      - cbTurno.getValue()
+        String mensaje = service.actualizar(nombreOriginal, txtNombreSolicitante.getText().trim(), txtSalon.getText().trim(), cbTurno.getValue());
+        if (mensaje != null) {
+            mostrarMensaje("ERROR", mensaje, Alert.AlertType.INFORMATION);
+        }else {
+            actualizarLista();
+            limpiar();
+        }
         // 5. El service debe buscar el registro original usando nombreOriginal.
         // 6. Si lo encuentra, debe cambiar sus datos.
         // 7. Luego refrescar el ListView y limpiar los controles.
         //
         // Importante:
         // Si nombreOriginal es null, entonces no se ha buscado ni seleccionado nada.
-        mostrarMensaje("Pendiente", "Completa la lógica de Actualizar", Alert.AlertType.INFORMATION);
     }
 
     @FXML
@@ -105,6 +120,21 @@ public class MainController {
         // TODO:
         // DELETE sí borra el objeto de la lista.
         //
+        String mensaje = "";
+        String nombreAEliminar ="";
+        if (txtNombreSolicitante.getText()!=null) {
+            nombreAEliminar = txtNombreSolicitante.getText().trim();
+        }else if(nombreOriginal!=null){
+            nombreAEliminar = nombreOriginal;
+        }
+        mensaje = service.eliminar(nombreAEliminar);
+        if (mensaje == null){
+            actualizarLista();
+            limpiar();
+        }else{
+            mostrarMensaje("ERROR", mensaje, Alert.AlertType.INFORMATION);
+        }
+
         // Flujo esperado:
         // 1. Tomar el nombre desde txtNombreSolicitante.
         // 2. Mandarlo al service.
@@ -114,7 +144,6 @@ public class MainController {
         //
         // También se puede seleccionar un elemento del ListView
         // y luego presionar Eliminar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Eliminar", Alert.AlertType.INFORMATION);
     }
 
     @FXML
