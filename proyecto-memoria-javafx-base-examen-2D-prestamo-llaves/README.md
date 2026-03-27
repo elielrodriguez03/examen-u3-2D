@@ -11,8 +11,7 @@ Este proyecto **no viene completo**. Ya trae la estructura lista para que no se 
 La aplicación registra préstamos de llaves de salón dentro de la escuela. Cada registro tiene:
 - Nombre del solicitante
 - Salón
-- Turno
-
+- Tur
 ## Tecnologías
 - Java 21 Temurin
 - JavaFX 21
