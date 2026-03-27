@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainController {
 
@@ -24,9 +25,11 @@ public class MainController {
     @FXML
     private ListView<String> lvRegistros;
 
-    private final PrestamoLlaveService service = new PrestamoLlaveService();
 
+    private final PrestamoLlaveService service = new PrestamoLlaveService();
     // Aquí se guarda el nombre original del registro encontrado o seleccionado.
+
+
     private String nombreOriginal;
 
     @FXML
@@ -53,10 +56,20 @@ public class MainController {
     public void agregar() {
         // TODO:
         // 1. Leer txtNombreSolicitante, txtSalon y cbTurno.
-        // 2. Mandar esos datos al service.
-        // 3. Si el service regresa un mensaje, mostrar error.
-        // 4. Si regresa null, refrescar la lista y limpiar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Agregar", Alert.AlertType.INFORMATION);
+        String nombreSolicitante =txtNombreSolicitante.getText();
+        String salon = txtSalon.getText();
+        String turno = cbTurno.getValue();
+
+        String error = service.agregar(nombreSolicitante, salon, turno);
+
+        if (error != null){
+            mostrarMensaje("error", error, Alert.AlertType.ERROR);
+            return;
+        }
+
+        actualizarLista();
+        limpiar();
+        mostrarMensaje("exito", "se registro correctamente", Alert.AlertType.INFORMATION);
     }
 
     @FXML
@@ -74,47 +87,42 @@ public class MainController {
         cbTurno.setValue(registro.getTurno());
 
         // Este valor es clave para UPDATE.
+
         nombreOriginal = registro.getNombreSolicitante();
     }
 
     @FXML
     public void actualizar() {
-        // TODO:
-        // UPDATE reutiliza los mismos controles.
-        //
-        // Flujo esperado:
-        // 1. Primero buscar por nombre o seleccionar desde el ListView.
-        // 2. Eso debe cargar los datos en pantalla y guardar nombreOriginal.
-        // 3. Luego el usuario modifica txtNombreSolicitante, txtSalon y cbTurno.
-        // 4. Al presionar Actualizar, mandar al service:
-        //      - nombreOriginal
-        //      - txtNombreSolicitante.getText()
-        //      - txtSalon.getText()
-        //      - cbTurno.getValue()
-        // 5. El service debe buscar el registro original usando nombreOriginal.
-        // 6. Si lo encuentra, debe cambiar sus datos.
-        // 7. Luego refrescar el ListView y limpiar los controles.
-        //
-        // Importante:
-        // Si nombreOriginal es null, entonces no se ha buscado ni seleccionado nada.
-        mostrarMensaje("Pendiente", "Completa la lógica de Actualizar", Alert.AlertType.INFORMATION);
+        if (nombreOriginal== null){
+            mostrarMensaje("aviso", "seleccione registro para actualizar", Alert.AlertType.WARNING);
+            return;
+        }
+        String nuevonombre = txtNombreSolicitante.getText();
+        String nombresasalon= txtSalon.getText();
+        String nuevoturno = cbTurno.getValue();
+
+        String error = service.actualizar(nombreOriginal, nuevonombre, nombresasalon, nuevoturno);
+        if (error != null){
+            mostrarMensaje("error", error, Alert.AlertType.ERROR);
+            return;
+
+        }
+        actualizarLista();
+        limpiar();
+        mostrarMensaje("exito", "Cse actualizo correctamnete", Alert.AlertType.INFORMATION);
     }
 
     @FXML
     public void eliminar() {
-        // TODO:
-        // DELETE sí borra el objeto de la lista.
-        //
-        // Flujo esperado:
-        // 1. Tomar el nombre desde txtNombreSolicitante.
-        // 2. Mandarlo al service.
-        // 3. El service debe buscarlo y eliminarlo de la lista.
-        // 4. Refrescar el ListView.
-        // 5. Limpiar controles.
-        //
-        // También se puede seleccionar un elemento del ListView
-        // y luego presionar Eliminar.
-        mostrarMensaje("Pendiente", "Completa la lógica de Eliminar", Alert.AlertType.INFORMATION);
+        String nombreEliminar = txtNombreSolicitante.getText();
+        String error = service.eliminar(nombreEliminar);
+        if (error!=null){
+            mostrarMensaje("error", error, Alert.AlertType.ERROR);
+            return;
+        }
+        actualizarLista();
+        limpiar();
+        mostrarMensaje("exito", "registro eliminado correctamnete", Alert.AlertType.INFORMATION);
     }
 
     @FXML
@@ -151,11 +159,12 @@ public class MainController {
         }
     }
 
-    private void mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
+    private String mostrarMensaje(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+        return titulo;
     }
 }

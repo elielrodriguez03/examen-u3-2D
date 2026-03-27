@@ -27,37 +27,65 @@ public class PrestamoLlaveService {
     }
 
     public String agregar(String nombreSolicitante, String salon, String turno) {
-        // TODO:
-        // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Validar que salon no esté vacío.
-        // 3. Validar que turno no sea null.
-        // 4. Validar que no exista otro registro con el mismo nombreSolicitante.
-        // 5. Si todo está bien, crear un objeto PrestamoLlave y guardarlo en repository.
-        // 6. Regresar null cuando el registro se guarde correctamente.
-        return "Completa la lógica de agregar en el service";
+        if (nombreSolicitante == null || nombreSolicitante.isEmpty()) {
+            return "el nombre es obligatorio";
+        }
+        if (salon == null || salon.isEmpty()) {
+            return "el salon es obligatorio";
+        }
+        if (turno == null) {
+            return "se debe seleccionar un turno";
+        }
+        if (repository.buscarPorNombreSolicitante(nombreSolicitante.trim()) != null) {
+            return "ya esta registrado un alumno con ese nombre";
+        }
+        PrestamoLlave nuevo = new PrestamoLlave(nombreSolicitante, salon, turno);
+        repository.guardar(nuevo);
+        return null;
     }
 
     public String actualizar(String nombreOriginal, String nombreNuevo, String salon, String turno) {
-        // TODO:
-        // 1. Validar que nombreOriginal no sea null ni vacío.
-        // 2. Validar que nombreNuevo no esté vacío.
-        // 3. Validar que salon no esté vacío.
-        // 4. Validar que turno no sea null.
-        // 5. Buscar el registro original usando nombreOriginal.
-        // 6. Si no existe, regresar mensaje de error.
-        // 7. Si el nombre cambió, validar que el nuevo nombre no esté repetido.
-        // 8. Si todo está bien, actualizar los atributos del objeto encontrado.
-        // 9. Regresar null si todo salió bien.
-        return "Completa la lógica de actualizar en el service";
+        if (nombreOriginal == null || nombreOriginal.isEmpty()) {
+            return "no se a podido actualizar";
+        }
+        PrestamoLlave archivoexixtente = repository.buscarPorNombreSolicitante(nombreOriginal);
+        if (archivoexixtente == null) {
+            return "el registro no existe";
+        }
+        if (nombreNuevo == null || nombreNuevo.isEmpty()) {
+            return "el nuevo nombre no puede estar vacio";
+        }
+        if (repository.buscarPorNombreSolicitante(nombreOriginal.trim()) != null) {
+            return "ya hay un alumno registrado con ese nombre";
+        }
+        if (salon == null || salon.isEmpty()) {
+            return "el salon es obligatorio";
+        }
+        if (turno == null) {
+            return "se debe seleccionar un turno";
+        }
+        if (nombreOriginal.equalsIgnoreCase(nombreNuevo.trim())) {
+            if (repository.buscarPorNombreSolicitante(nombreNuevo.trim()) != null) {
+                return "el nombre ya esta usado";
+            }
+            archivoexixtente.setNombreSolicitante(nombreNuevo.trim());
+            archivoexixtente.setSalon(salon.trim());
+            archivoexixtente.setTurno(turno.trim());
+            return null;
+        }
+        PrestamoLlave nuevo = new PrestamoLlave(nombreOriginal, salon, turno);
+        repository.guardar(nuevo);
+        return null;
     }
 
     public String eliminar(String nombreSolicitante) {
-        // TODO:
-        // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Buscar si existe el registro.
-        // 3. Si no existe, regresar mensaje de error.
-        // 4. Si existe, eliminarlo desde repository.
-        // 5. Regresar null si se eliminó correctamente.
-        return "Completa la lógica de eliminar en el service";
+        if (nombreSolicitante == null) {
+            return "el nombre no puede estar vacio";
+        }
+        if (buscarPorNombreSolicitante(nombreSolicitante) == null) {
+            return "el nombre no existe";
+        }
+        repository.eliminarPorNombreSolicitante(nombreSolicitante);
+        return  null;
     }
 }
