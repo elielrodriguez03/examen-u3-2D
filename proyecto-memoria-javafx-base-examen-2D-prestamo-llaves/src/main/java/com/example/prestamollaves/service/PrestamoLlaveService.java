@@ -3,6 +3,7 @@ package com.example.prestamollaves.service;
 import com.example.prestamollaves.model.PrestamoLlave;
 import com.example.prestamollaves.repository.PrestamoLlaveRepository;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 public class PrestamoLlaveService {
@@ -28,36 +29,76 @@ public class PrestamoLlaveService {
 
     public String agregar(String nombreSolicitante, String salon, String turno) {
         // TODO:
-        // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Validar que salon no esté vacío.
-        // 3. Validar que turno no sea null.
-        // 4. Validar que no exista otro registro con el mismo nombreSolicitante.
+        validar(nombreSolicitante,salon,turno);
         // 5. Si todo está bien, crear un objeto PrestamoLlave y guardarlo en repository.
-        // 6. Regresar null cuando el registro se guarde correctamente.
-        return "Completa la lógica de agregar en el service";
+        PrestamoLlave nuevo = new PrestamoLlave(nombreSolicitante.trim(),salon.trim(),turno);
+        repository.guardar(nuevo);
+        // 6. Regress null cuando el registry se guarde correctamente.
+        return null;
     }
 
     public String actualizar(String nombreOriginal, String nombreNuevo, String salon, String turno) {
         // TODO:
         // 1. Validar que nombreOriginal no sea null ni vacío.
-        // 2. Validar que nombreNuevo no esté vacío.
-        // 3. Validar que salon no esté vacío.
-        // 4. Validar que turno no sea null.
-        // 5. Buscar el registro original usando nombreOriginal.
-        // 6. Si no existe, regresar mensaje de error.
-        // 7. Si el nombre cambió, validar que el nuevo nombre no esté repetido.
-        // 8. Si todo está bien, actualizar los atributos del objeto encontrado.
-        // 9. Regresar null si todo salió bien.
-        return "Completa la lógica de actualizar en el service";
+        if(nombreOriginal == null || nombreOriginal.isBlank()){
+            throw new InvalidParameterException();
+        }
+        if(nombreNuevo == null || nombreNuevo.isBlank()){
+            throw new InvalidParameterException();
+        }
+        if(salon == null || salon.isBlank()){
+            throw new InvalidParameterException();
+        }
+        if(turno == null || turno.isBlank()){
+            throw new InvalidParameterException();
+        }
+        PrestamoLlave existente = buscarPorNombreSolicitante(nombreOriginal);
+        if (existente == null){
+            throw new InvalidParameterException();
+        }
+        if (!nombreOriginal.equalsIgnoreCase(nombreNuevo.trim())){
+            if (buscarPorNombreSolicitante(nombreNuevo)!=null){
+                throw new InvalidParameterException();
+            }
+        }
+        existente.setNombreSolicitante(nombreNuevo.trim());
+        existente.setSalon(salon.trim());
+        existente.setTurno(turno.trim());
+        return null;
     }
 
     public String eliminar(String nombreSolicitante) {
         // TODO:
         // 1. Validar que nombreSolicitante no esté vacío.
-        // 2. Buscar si existe el registro.
-        // 3. Si no existe, regresar mensaje de error.
-        // 4. Si existe, eliminarlo desde repository.
-        // 5. Regresar null si se eliminó correctamente.
-        return "Completa la lógica de eliminar en el service";
+        if(nombreSolicitante == null || nombreSolicitante.isBlank()){
+            throw new InvalidParameterException();
+        }
+        if (buscarPorNombreSolicitante(nombreSolicitante)!=null){
+            repository.eliminarPorNombreSolicitante(nombreSolicitante);
+        }else {
+            throw new RuntimeException();
+        }
+        return null;
+    }
+    public void validar(String nombreSolicitante, String salon, String turno){
+        try {
+        if(nombreSolicitante == null || nombreSolicitante.isBlank()){
+            throw new InvalidParameterException();
+        }
+        // 2. Validar que salon no esté vacío.
+        if(salon == null || salon.isBlank()){
+            throw new InvalidParameterException();
+        }
+        // 3. Validar que turno no sea null.
+        if(turno == null || turno.isBlank()){
+            throw new InvalidParameterException();
+        }
+        // 4. Validar que no exista otro registro con el mismo nombreSolicitante.
+        if (buscarPorNombreSolicitante(nombreSolicitante) != null){
+            throw new InvalidParameterException();
+        }
+        } catch (InvalidParameterException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
