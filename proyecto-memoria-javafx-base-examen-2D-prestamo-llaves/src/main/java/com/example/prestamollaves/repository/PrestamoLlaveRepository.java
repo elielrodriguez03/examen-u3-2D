@@ -1,40 +1,30 @@
 package com.example.prestamollaves.repository;
 
 import com.example.prestamollaves.model.PrestamoLlave;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PrestamoLlaveRepository {
+    private List<PrestamoLlave> prestamos = new ArrayList<>();
 
-    private final List<PrestamoLlave> registros = new ArrayList<>();
-
-    public void guardar(PrestamoLlave registro) {
-        registros.add(registro);
+    public void agregar(PrestamoLlave prestamo) {
+        prestamos.add(prestamo);
     }
 
-    public List<PrestamoLlave> obtenerTodos() {
-        return registros;
+    public List<PrestamoLlave> obtenerTodos(){
+        return prestamos;
     }
 
-    public PrestamoLlave buscarPorNombreSolicitante(String nombreSolicitante) {
-        for (int i = 0; i < registros.size(); i++) {
-            PrestamoLlave actual = registros.get(i);
-            if (actual.getNombreSolicitante().equalsIgnoreCase(nombreSolicitante)) {
-                return actual;
+    public PrestamoLlave buscarPorNombre(String nombre) {
+        for (PrestamoLlave p : prestamos) {
+            if (p.getNombreSolicitante().equalsIgnoreCase(nombre)) {
+                return p;
             }
         }
         return null;
     }
 
-    public boolean eliminarPorNombreSolicitante(String nombreSolicitante) {
-        for (int i = 0; i < registros.size(); i++) {
-            PrestamoLlave actual = registros.get(i);
-            if (actual.getNombreSolicitante().equalsIgnoreCase(nombreSolicitante)) {
-                registros.remove(i);
-                return true;
-            }
-        }
-        return false;
+    public void eliminar(PrestamoLlave prestamo) {
+        prestamos.remove(prestamo);
     }
 }

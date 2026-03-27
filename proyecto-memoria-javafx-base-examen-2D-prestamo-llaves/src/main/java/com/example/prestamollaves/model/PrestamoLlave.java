@@ -11,33 +11,20 @@ public class PrestamoLlave {
         this.salon = salon;
         this.turno = turno;
     }
+    public String getNombreSolicitante() { return nombreSolicitante; }
+    public void setNombreSolicitante(String nombreSolicitante) { this.nombreSolicitante = nombreSolicitante; }
 
-    public String getNombreSolicitante() {
-        return nombreSolicitante;
-    }
+    public String getSalon() { return salon; }
+    public void setSalon(String salon) { this.salon = salon; }
 
-    public void setNombreSolicitante(String nombreSolicitante) {
-        this.nombreSolicitante = nombreSolicitante;
-    }
-
-    public String getSalon() {
-        return salon;
-    }
-
-    public void setSalon(String salon) {
-        this.salon = salon;
-    }
-
-    public String getTurno() {
-        return turno;
-    }
-
-    public void setTurno(String turno) {
-        this.turno = turno;
-    }
+    public String getTurno() { return turno; }
+    public void setTurno(String turno) { this.turno = turno; }
 
     @Override
     public String toString() {
         return nombreSolicitante + " | " + salon + " | " + turno;
     }
 }
+
+
+
