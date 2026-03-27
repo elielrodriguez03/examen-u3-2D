@@ -28,13 +28,9 @@ public class PrestamoLlaveRepository {
     }
 
     public boolean eliminarPorNombreSolicitante(String nombreSolicitante) {
-        for (int i = 0; i < registros.size(); i++) {
-            PrestamoLlave actual = registros.get(i);
-            if (actual.getNombreSolicitante().equalsIgnoreCase(nombreSolicitante)) {
-                registros.remove(i);
-                return true;
-            }
-        }
         return false;
+    }
+
+    public void agregar(PrestamoLlave nuevo) {
     }
 }
